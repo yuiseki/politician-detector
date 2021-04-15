@@ -1,7 +1,28 @@
 require 'test_helper'
 
 class PoliticianTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "create politician" do
+    politician = Politician.new
+    assert_not politician.save, "Saved the politician without name"
+  end
+
+  test "politician belongs to political party" do
+    politician = Politician.new(name: "test taro")
+    assert politician.save
+    political_party = PoliticalParty.new(name: "test party")
+    assert political_party.save
+    politician_to_political_party = PoliticianToPoliticalParty.find_or_create_by(politician: politician, political_party: political_party)
+    assert politician_to_political_party.save
+    assert_equal politician.political_parties.first.political_party.name, "test party"
+  end
+
+  test "politician has many election" do
+    politician = Politician.new(name: "test taro")
+    assert politician.save
+    election = Election.new(name: "test election")
+    assert election.save
+    politician_to_election = PoliticianToElection.find_or_create_by(politician: politician, election: election)
+    assert politician_to_election.save
+    assert_equal politician.elections.first.election.name, "test election"
+  end
 end

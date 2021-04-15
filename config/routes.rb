@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :political_parties
+  resources :elections
   resources :users
   resources :politicians
   constraints format: :json do
