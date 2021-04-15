@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :manifests
   resources :opinions
   resources :educations
   resources :political_parties

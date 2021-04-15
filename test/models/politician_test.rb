@@ -28,6 +28,18 @@ class PoliticianTest < ActiveSupport::TestCase
     assert_equal election.politicians.count, 1
   end
 
+  test "politician has many manifests for election" do
+    politician = Politician.new(name: "test taro")
+    assert politician.save
+    election = Election.new(name: "test election")
+    assert election.save
+    politician_to_election = PoliticianToElection.find_or_create_by(politician: politician, election: election)
+    assert politician_to_election.save
+    manifest = Manifest.find_or_create_by(election: politician_to_election, text: "test manifest")
+    assert manifest.save
+    assert_equal politician.elections.first.manifests.first.text, "test manifest"
+  end
+
   test "politician has many educations" do
     politician = Politician.new(name: "test taro")
     assert politician.save
